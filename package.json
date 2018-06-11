@@ -1,6 +1,6 @@
 {
   "name": "zigbee-shepherd-converters",
-  "version": "1.0.1",
+  "version": "2.0.4",
   "description": "Collection of device converters to be used with zigbee-shepherd",
   "main": "index.js",
   "repository": {
@@ -25,7 +25,9 @@
     "url": "https://github.com/Koenkk/zigbee-shepherd-converters/issues"
   },
   "homepage": "https://github.com/Koenkk/zigbee-shepherd-converters",
-  "dependencies": {},
+  "dependencies": {
+    "debounce": "*"
+  },
   "devDependencies": {
     "eslint": "*",
     "eslint-config-google": "*"

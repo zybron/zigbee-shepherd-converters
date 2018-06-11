@@ -1,3 +1,5 @@
+'use strict';
+
 const fz = require('./converters/fromZigbee');
 const tz = require('./converters/toZigbee');
 
@@ -254,6 +256,25 @@ const devices = [
         fromZigbee: [fz.light_brightness, fz.light_color_colortemp, fz.ignore_onoff_change],
         toZigbee: [tz.onoff, tz.light_brightness, tz.light_color, tz.ignore_transition],
     },
+    {
+        zigbeeModel: ['TRADFRI wireless dimmer'],
+        model: 'ICTC-G-1',
+        vendor: 'IKEA',
+        description: 'TRADFRI wireless dimmer',
+        supports: 'brightness (0-255), fast rotate for instant 0/255',
+        fromZigbee: [
+            fz.ICTC_G_1_move, fz.ICTC_G_1_moveWithOnOff, fz.ICTC_G_1_stop, fz.ICTC_G_1_stopWithOnOff,
+            fz.ICTC_G_1_moveToLevelWithOnOff, fz.ignore_cmd_readRsp, fz.ignore_cmd_discoverRsp,
+        ],
+        toZigbee: [],
+        onAfIncomingMsg: [1],
+        configure: (ieeeAddr, shepherd, coordinator, callback) => {
+            const device = shepherd.find(ieeeAddr, 1);
+            device.bind('genLevelCtrl', coordinator, (error) => {
+                callback(!error);
+            });
+        },
+    },
 
     // Philips
     {
@@ -356,7 +377,7 @@ const devices = [
         toZigbee: [tz.onoff],
         configure: (ieeeAddr, shepherd, coordinator, callback) => {
             const cfgRptRec = {
-                direction: 0, attrId: 0, dataType: 16, minRepIntval: 1, maxRepIntval: 1000, repChange: 0,
+                direction: 0, attrId: 0, dataType: 16, minRepIntval: 0, maxRepIntval: 1000, repChange: 0,
             };
 
             const device = shepherd.find(ieeeAddr, 3);
