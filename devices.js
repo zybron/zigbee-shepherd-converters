@@ -3,6 +3,37 @@
 const fz = require('./converters/fromZigbee');
 const tz = require('./converters/toZigbee');
 
+const generic = {
+    light_onoff_brightness: () => {
+        return {
+            supports: 'on/off, brightness',
+            fromZigbee: [fz.light_brightness, fz.ignore_onoff_change],
+            toZigbee: [tz.onoff, tz.light_brightness, tz.ignore_transition],
+        };
+    },
+    light_onoff_brightness_colortemp: () => {
+        return {
+            supports: 'on/off, brightness, color temperature',
+            fromZigbee: [fz.light_brightness, fz.light_color_colortemp, fz.ignore_onoff_change],
+            toZigbee: [tz.onoff, tz.light_brightness, tz.light_colortemp, tz.ignore_transition],
+        };
+    },
+    light_onoff_brightness_colorxy: () => {
+        return {
+            supports: 'on/off, brightness, color xy',
+            fromZigbee: [fz.light_brightness, fz.light_color_colortemp, fz.ignore_onoff_change],
+            toZigbee: [tz.onoff, tz.light_brightness, tz.light_color, tz.ignore_transition],
+        };
+    },
+    light_onoff_brightness_colortemp_colorxy: () => {
+        return {
+            supports: 'on/off, brightness, color temperature, color xy',
+            fromZigbee: [fz.light_brightness, fz.light_color_colortemp, fz.ignore_onoff_change],
+            toZigbee: [tz.onoff, tz.light_brightness, tz.light_colortemp, tz.light_color, tz.ignore_transition],
+        };
+    },
+};
+
 const devices = [
     // Xiaomi
     {
@@ -69,7 +100,7 @@ const devices = [
         model: 'QBKG03LM',
         vendor: 'Xiaomi',
         description: 'Aqara double key wired wall switch',
-        supports: 'l1 and l2 on/off',
+        supports: 'left and right on/off',
         fromZigbee: [fz.QBKG03LM_state, fz.QBKG03LM_buttons],
         toZigbee: [tz.onoff],
         ep: {'left': 2, 'right': 3},
@@ -198,70 +229,79 @@ const devices = [
         model: 'LED1545G12',
         vendor: 'IKEA',
         description: 'TRADFRI LED bulb E27 980 lumen, dimmable, white spectrum, opal white',
-        supports: 'on/off, brightness, color temperature',
-        fromZigbee: [fz.light_brightness, fz.light_color_colortemp, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.light_colortemp, tz.ignore_transition],
+        supports: generic.light_onoff_brightness_colortemp().supports,
+        fromZigbee: generic.light_onoff_brightness_colortemp().fromZigbee,
+        toZigbee: generic.light_onoff_brightness_colortemp().toZigbee,
     },
     {
         zigbeeModel: ['TRADFRI bulb E27 opal 1000lm', 'TRADFRI bulb E27 W opal 1000lm'],
         model: 'LED1623G12',
         vendor: 'IKEA',
         description: 'TRADFRI LED bulb E27 1000 lumen, dimmable, opal white',
-        supports: 'on/off, brightness',
-        fromZigbee: [fz.light_brightness, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.ignore_transition],
+        supports: generic.light_onoff_brightness().supports,
+        fromZigbee: generic.light_onoff_brightness().fromZigbee,
+        toZigbee: generic.light_onoff_brightness().toZigbee,
     },
     {
         zigbeeModel: ['TRADFRI bulb GU10 WS 400lm'],
         model: 'LED1537R6',
         vendor: 'IKEA',
         description: 'TRADFRI LED bulb GU10 400 lumen, dimmable, white spectrum',
-        supports: 'on/off, brightness, color temperature',
-        fromZigbee: [fz.light_brightness, fz.light_color_colortemp, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.light_colortemp, tz.ignore_transition],
+        supports: generic.light_onoff_brightness_colortemp().supports,
+        fromZigbee: generic.light_onoff_brightness_colortemp().fromZigbee,
+        toZigbee: generic.light_onoff_brightness_colortemp().toZigbee,
     },
     {
         zigbeeModel: ['TRADFRI bulb GU10 W 400lm'],
         model: 'LED1650R5',
         vendor: 'IKEA',
         description: 'TRADFRI LED bulb GU10 400 lumen, dimmable',
-        supports: 'on/off, brightness',
-        fromZigbee: [fz.light_brightness, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.ignore_transition],
+        supports: generic.light_onoff_brightness().supports,
+        fromZigbee: generic.light_onoff_brightness().fromZigbee,
+        toZigbee: generic.light_onoff_brightness().toZigbee,
     },
     {
         zigbeeModel: ['TRADFRI bulb E14 WS opal 400lm', 'TRADFRI bulb E12 WS opal 400lm'],
         model: 'LED1536G5',
         vendor: 'IKEA',
         description: 'TRADFRI LED bulb E12/E14 400 lumen, dimmable, white spectrum, opal white',
-        supports: 'on/off, brightness, color temperature',
-        fromZigbee: [fz.light_brightness, fz.light_color_colortemp, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.light_colortemp, tz.ignore_transition],
+        supports: generic.light_onoff_brightness_colortemp().supports,
+        fromZigbee: generic.light_onoff_brightness_colortemp().fromZigbee,
+        toZigbee: generic.light_onoff_brightness_colortemp().toZigbee,
     },
     {
         zigbeeModel: ['TRADFRI bulb E26 opal 1000lm'],
         model: 'LED1622G12',
         vendor: 'IKEA',
         description: 'TRADFRI LED bulb E26 1000 lumen, dimmable, opal white',
-        supports: 'on/off, brightness',
-        fromZigbee: [fz.light_brightness, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.ignore_transition],
+        supports: generic.light_onoff_brightness().supports,
+        fromZigbee: generic.light_onoff_brightness().fromZigbee,
+        toZigbee: generic.light_onoff_brightness().toZigbee,
     },
     {
         zigbeeModel: ['TRADFRI bulb E27 CWS opal 600lm'],
         model: 'LED1624G9',
         vendor: 'IKEA',
         description: 'TRADFRI LED bulb E27 600 lumen, dimmable, color, opal white',
-        supports: 'on/off, brightness, color xy',
-        fromZigbee: [fz.light_brightness, fz.light_color_colortemp, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.light_color, tz.ignore_transition],
+        supports: generic.light_onoff_brightness_colorxy().supports,
+        fromZigbee: generic.light_onoff_brightness_colorxy().fromZigbee,
+        toZigbee: generic.light_onoff_brightness_colorxy().toZigbee,
+    },
+    {
+        zigbeeModel: ['TRADFRI bulb E14 W op/ch 400lm'],
+        model: 'LED1649C5',
+        vendor: 'IKEA',
+        description: 'TRADFRI LED bulb E14 400 lumen, dimmable warm white, chandelier opal',
+        supports: generic.light_onoff_brightness().supports,
+        fromZigbee: generic.light_onoff_brightness().fromZigbee,
+        toZigbee: generic.light_onoff_brightness().toZigbee,
     },
     {
         zigbeeModel: ['TRADFRI wireless dimmer'],
         model: 'ICTC-G-1',
         vendor: 'IKEA',
         description: 'TRADFRI wireless dimmer',
-        supports: 'brightness (0-255), fast rotate for instant 0/255',
+        supports: 'brightness [0-255], quick rotate for instant 0/255',
         fromZigbee: [
             fz.ICTC_G_1_move, fz.ICTC_G_1_moveWithOnOff, fz.ICTC_G_1_stop, fz.ICTC_G_1_stopWithOnOff,
             fz.ICTC_G_1_moveToLevelWithOnOff, fz.ignore_cmd_readRsp, fz.ignore_cmd_discoverRsp,
@@ -275,6 +315,15 @@ const devices = [
             });
         },
     },
+    {
+        zigbeeModel: ['TRADFRI transformer 30W'],
+        model: 'ICPSHC24-30EU-IL-1',
+        vendor: 'IKEA',
+        description: 'TRADFRI driver for wireless control (30 watt)',
+        supports: generic.light_onoff_brightness().supports,
+        fromZigbee: generic.light_onoff_brightness().fromZigbee,
+        toZigbee: generic.light_onoff_brightness().toZigbee,
+    },
 
     // Philips
     {
@@ -282,27 +331,27 @@ const devices = [
         model: '7146060PH',
         vendor: 'Philips',
         description: 'Hue Go',
-        supports: 'on/off, brightness, color temperature, color xy',
-        fromZigbee: [fz.light_brightness, fz.light_color_colortemp, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.light_colortemp, tz.light_color, tz.ignore_transition],
+        supports: generic.light_onoff_brightness_colortemp_colorxy().supports,
+        fromZigbee: generic.light_onoff_brightness_colortemp_colorxy().fromZigbee,
+        toZigbee: generic.light_onoff_brightness_colortemp_colorxy().toZigbee,
     },
     {
         zigbeeModel: ['LWB010'],
         model: '8718696449691',
         vendor: 'Philips',
         description: 'Hue White Single bulb B22',
-        supports: 'on/off, brightness',
-        fromZigbee: [fz.light_brightness, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.ignore_transition],
+        supports: generic.light_onoff_brightness().supports,
+        fromZigbee: generic.light_onoff_brightness().fromZigbee,
+        toZigbee: generic.light_onoff_brightness().toZigbee,
     },
     {
         zigbeeModel: ['LCT015'],
         model: '9290012573A',
         vendor: 'Philips',
         description: 'Hue white and color ambiance E27',
-        supports: 'on/off, brightness, color temperature, color xy',
-        fromZigbee: [fz.light_brightness, fz.light_color_colortemp, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.light_colortemp, tz.light_color, tz.ignore_transition],
+        supports: generic.light_onoff_brightness_colortemp_colorxy().supports,
+        fromZigbee: generic.light_onoff_brightness_colortemp_colorxy().fromZigbee,
+        toZigbee: generic.light_onoff_brightness_colortemp_colorxy().toZigbee,
     },
 
     // Belkin
@@ -311,9 +360,9 @@ const devices = [
         model: 'F7C033',
         vendor: 'Belkin',
         description: 'WeMo smart LED bulb',
-        supports: 'on/off, brightness',
-        fromZigbee: [fz.light_brightness, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.ignore_transition],
+        supports: generic.light_onoff_brightness().supports,
+        fromZigbee: generic.light_onoff_brightness().fromZigbee,
+        toZigbee: generic.light_onoff_brightness().toZigbee,
     },
 
     // EDP
@@ -353,9 +402,9 @@ const devices = [
         model: 'AA69697',
         vendor: 'OSRAM',
         description: 'Classic A60 RGBW',
-        supports: 'on/off, brightness, color temperature, color xy',
-        fromZigbee: [fz.light_brightness, fz.light_color_colortemp, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.light_colortemp, tz.light_color, tz.ignore_transition],
+        supports: generic.light_onoff_brightness_colortemp_colorxy().supports,
+        fromZigbee: generic.light_onoff_brightness_colortemp_colorxy().fromZigbee,
+        toZigbee: generic.light_onoff_brightness_colortemp_colorxy().toZigbee,
     },
     {
         // AA70155 is model number of both bulbs.
@@ -363,9 +412,9 @@ const devices = [
         model: 'AA70155',
         vendor: 'OSRAM',
         description: 'LIGHTIFY LED A19 tunable white / Classic A60 TW',
-        supports: 'on/off, brightness, color temperature',
-        fromZigbee: [fz.light_brightness, fz.light_color_colortemp, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.light_colortemp, tz.ignore_transition],
+        supports: generic.light_onoff_brightness_colortemp().supports,
+        fromZigbee: generic.light_onoff_brightness_colortemp().fromZigbee,
+        toZigbee: generic.light_onoff_brightness_colortemp().toZigbee,
     },
     {
         zigbeeModel: ['Plug 01'],
@@ -401,9 +450,9 @@ const devices = [
         model: 'HALIGHTDIMWWE27',
         vendor: 'Hive',
         description: 'Active light dimmable',
-        supports: 'on/off, brightness',
-        fromZigbee: [fz.light_brightness, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.ignore_transition],
+        supports: generic.light_onoff_brightness().supports,
+        fromZigbee: generic.light_onoff_brightness().fromZigbee,
+        toZigbee: generic.light_onoff_brightness().toZigbee,
     },
 
     // Innr
@@ -412,9 +461,9 @@ const devices = [
         model: 'RB 185 C',
         vendor: 'Innr',
         description: 'E27 Bulb RGBW',
-        supports: 'on/off, brightness, color temperature, color xy',
-        fromZigbee: [fz.light_brightness, fz.light_color_colortemp, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.light_colortemp, tz.light_color, tz.ignore_transition],
+        supports: generic.light_onoff_brightness_colortemp_colorxy().supports,
+        fromZigbee: generic.light_onoff_brightness_colortemp_colorxy().fromZigbee,
+        toZigbee: generic.light_onoff_brightness_colortemp_colorxy().toZigbee,
     },
 
     // Sylvania
@@ -423,18 +472,18 @@ const devices = [
         model: '73742',
         vendor: 'Sylvania',
         description: 'LIGHTIFY LED adjustable white RT 5/6',
-        supports: 'on/off, brightness, color temperature',
-        fromZigbee: [fz.light_brightness, fz.light_color_colortemp, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.light_colortemp, tz.ignore_transition],
+        supports: generic.light_onoff_brightness_colortemp().supports,
+        fromZigbee: generic.light_onoff_brightness_colortemp().fromZigbee,
+        toZigbee: generic.light_onoff_brightness_colortemp().toZigbee,
     },
     {
         zigbeeModel: ['LIGHTIFY BR Tunable White'],
         model: '73740',
         vendor: 'Sylvania',
         description: 'LIGHTIFY LED adjustable white BR30',
-        supports: 'on/off, brightness, color temperature',
-        fromZigbee: [fz.light_brightness, fz.light_color_colortemp, fz.ignore_onoff_change],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.light_colortemp, tz.ignore_transition],
+        supports: generic.light_onoff_brightness_colortemp().supports,
+        fromZigbee: generic.light_onoff_brightness_colortemp().fromZigbee,
+        toZigbee: generic.light_onoff_brightness_colortemp().toZigbee,
     },
 
     // GE
@@ -443,9 +492,47 @@ const devices = [
         model: '22670',
         vendor: 'GE',
         description: 'Link smart LED light bulb, BR30 soft white (2700K)',
+        supports: generic.light_onoff_brightness().supports,
+        fromZigbee: generic.light_onoff_brightness().fromZigbee,
+        toZigbee: generic.light_onoff_brightness().toZigbee,
+    },
+    {
+        zigbeeModel: ['45852'],
+        model: '45852GE',
+        vendor: 'GE',
+        description: 'ZigBee plug-in smart dimmer',
         supports: 'on/off, brightness',
-        fromZigbee: [fz.light_brightness, fz.ignore_onoff_change],
+        fromZigbee: [fz.light_brightness, fz.ignore_onoff_change, fz.generic_state],
         toZigbee: [tz.onoff, tz.light_brightness, tz.ignore_transition],
+        configure: (ieeeAddr, shepherd, coordinator, callback) => {
+            const cfgRptRec = {
+                direction: 0, attrId: 0, dataType: 16, minRepIntval: 0, maxRepIntval: 1000, repChange: 0,
+            };
+
+            const device = shepherd.find(ieeeAddr, 1);
+            if (device) {
+                device.bind('genOnOff', coordinator, (error) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        device.foundation('genOnOff', 'configReport', [cfgRptRec]).then((rsp) => {
+                            callback(rsp[0].status === 0);
+                        });
+                    }
+                });
+            }
+        },
+    },
+
+    // Sengled
+    {
+        zigbeeModel: ['E11-G13'],
+        model: 'E11-G13',
+        vendor: 'Sengled',
+        description: 'Element Classic (A19)',
+        supports: generic.light_onoff_brightness().supports,
+        fromZigbee: generic.light_onoff_brightness().fromZigbee,
+        toZigbee: generic.light_onoff_brightness().toZigbee,
     },
 ];
 
